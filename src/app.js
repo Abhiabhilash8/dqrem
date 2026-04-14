@@ -62,21 +62,40 @@ function checkIfSolved(title,sublist){
 
 
 
-async function checkAndNotify(username,email){
-    // here we check if the daily question is solved or not
-    try{
+async function checkAndNotify(username, email) {
+  try {
+    const daily = await leetcode.daily();
 
-        const daily = await leetcode.daily();
-        const recent = await leetcode.user(username);
-        const sl = recent.recentSubmissionList || []
-        const solved = checkIfSolved(daily.question.title,sl)  
-        if(!solved){
-            await sendMail(email,daily.question.title);
-        }
+    let recent;
 
-    }catch(err){
-        console.log(err);
+    try {
+      recent = await leetcode.user(username);
+    } catch (err) {
+      console.log(`Invalid LeetCode user: ${username}`);
+      return; // stop execution for this user
     }
+
+    // 🔹 Check if user data exists
+    if (!recent || !recent.recentSubmissionList) {
+      console.log(`No data found for user: ${username}`);
+      return;
+    }
+
+    const sl = recent.recentSubmissionList || [];
+
+    const solved = checkIfSolved(daily.question.title, sl);
+
+    if (!solved) {
+        try {
+            await sendMail(email, daily.question.title);
+        } catch (err) {
+                console.log(`Mail failed for ${email}`);
+            }
+    }
+
+  } catch (err) {
+    console.log("Error in checkAndNotify:", err);
+  }
 }
 
 
@@ -86,6 +105,8 @@ cron.schedule("0 8 * * *",async () => {
     for(let user of users){
        await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 8 am schedule"));;
     }
+}, {
+  timezone: "Asia/Kolkata"
 });
 
 // 12 PM
@@ -94,6 +115,8 @@ cron.schedule("0 12 * * *",async () => {
   for(let user of users){
        await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 12 am schedule"));;
     }
+}, {
+  timezone: "Asia/Kolkata"
 });
 
 // Every hour from 6 PM to 11 PM
@@ -102,13 +125,10 @@ cron.schedule("0 18-23 * * *",async () => {
   for(let user of users){
        await checkAndNotify(user.username, user.email).catch(()=>console.log("error from 6 am schedule"));;
     }
+}, {
+  timezone: "Asia/Kolkata"
 });
 
-// cron.schedule("30 16 * * *", () => {
-//   for(let user of users){
-//         checkAndNotify(user.username, user.email).catch(()=>console.log("error at 8 am schedule"));;
-//     }
-// });
 
 
 

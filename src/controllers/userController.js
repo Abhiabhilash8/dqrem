@@ -4,12 +4,21 @@ const registerUser = async (req, res) => {
   const { email, username } = req.body;
 
   try {
+    // 🔹 1. Email format validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      return res.send("Invalid email format ❌");
+    }
+
+    // 🔹 2. Check duplicate user
     const existing = await User.findOne({ email });
 
     if (existing) {
       return res.send("User already registered");
     }
 
+    // 🔹 3. Save user
     const user = new User({ email, username });
     await user.save();
 
