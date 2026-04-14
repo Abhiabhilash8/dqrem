@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LeetCode Reminder</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 10px;
+      width: 350px;
+      text-align: center;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #22c55e;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    .msg {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>🚀 LeetCode Reminder</h2>
+    <p>Never miss your daily problem again!</p>
+
+    <input id="email" type="email" placeholder="Enter your email" />
+    <input id="username" type="text" placeholder="LeetCode username" />
+
+    <button onclick="register()">Start Reminder</button>
+
+    <p class="msg" id="msg"></p>
+  </div>
+
+  <script>
+    async function register() {
+      const email = document.getElementById("email").value;
+      const username = document.getElementById("username").value;
+
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, username })
+      });
+
+      const text = await res.text();
+
+      document.getElementById("msg").innerText = text;
+    }
+  </script>
+
+</body>
+</html>
