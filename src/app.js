@@ -15,6 +15,7 @@ connectDB();
 
 
 app.get("/", (req, res) => {
+  console.log("hit at root")
   res.sendFile(path.join(__dirname, "../index.html"));
 });
 app.use(exp.json());
@@ -34,6 +35,7 @@ const transporter = nodemailer.createTransport({
 });
 
 async function sendMail(to,title){
+    console.log("here in sendMail function fortesting mai:",to)
     await transporter.sendMail({
         from: process.env.EMAIL,
         to: to,
@@ -135,7 +137,10 @@ cron.schedule("0 18-23 * * *",async () => {
 cron.schedule("*/20 * * * *",async () => {
     const users = await User.find()
   for(let user of users){
-       if(user.username == 'abhilashsadhu8') await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 12 am schedule"));;
+       if(user.username == 'abhilashsadhu8'){
+        console.log("here for abhilashsadhu8 mail initiated for:",user.email)
+        await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 12 am schedule"));;
+       }
     }
 }, {
   timezone: "Asia/Kolkata"
