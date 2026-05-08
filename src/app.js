@@ -103,49 +103,6 @@ async function checkAndNotify(username, email) {
 }
 
 
-// // 8 AM
-// cron.schedule("0 8 * * *",async () => {
-//     const users = await User.find()
-//     for(let user of users){
-//        await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 8 am schedule"));;
-//     }
-// }, {
-//   timezone: "Asia/Kolkata"
-// });
-
-// // 12 PM
-// cron.schedule("0 12 * * *",async () => {
-//     const users = await User.find()
-//   for(let user of users){
-//        await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 12 am schedule"));;
-//     }
-// }, {
-//   timezone: "Asia/Kolkata"
-// });
-
-// // Every hour from 6 PM to 11 PM
-// cron.schedule("0 18-23 * * *",async () => {
-//     const users = await User.find()
-//   for(let user of users){
-//        await checkAndNotify(user.username, user.email).catch(()=>console.log("error from 6 am schedule"));;
-//     }
-// }, {
-//   timezone: "Asia/Kolkata"
-// });
-
-// // for testing
-// cron.schedule("*/20 * * * *",async () => {
-//     const users = await User.find()
-//   for(let user of users){
-//        if(user.username == 'abhilashsadhu8'){
-//         console.log("here for abhilashsadhu8 mail initiated for:",user.email)
-//         await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 12 am schedule"));;
-//        }
-//     }
-// }, {
-//   timezone: "Asia/Kolkata"
-// });
-
 app.get("/run-reminder", async (req, res) => {
 
     // 🔒 protect route
