@@ -132,7 +132,7 @@ cron.schedule("0 18-23 * * *",async () => {
 });
 
 // for testing
-cron.schedule("* * * * *",async () => {
+cron.schedule("*/20 * * * *",async () => {
     const users = await User.find()
   for(let user of users){
        if(user.username == 'abhilashsadhu8') await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 12 am schedule"));;
