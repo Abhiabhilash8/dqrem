@@ -38,7 +38,7 @@ async function sendMail(to,title){
         from: process.env.EMAIL,
         to: to,
         subject: "LeetCode Reminder 🚨",
-        text: `whats wrong with you man, you didnt solve todays dailq: ${title}`,
+        text: `Time to solve today's question !!!!! ${title}`,
     });
 }
 
@@ -89,12 +89,14 @@ async function checkAndNotify(username, email) {
         try {
             await sendMail(email, daily.question.title);
         } catch (err) {
-                console.log(`Mail failed for ${email}`);
-            }
+            console.log(`Mail failed for ${email}`);
+            console.log(err);
+        }
     }
 
   } catch (err) {
     console.log("Error in checkAndNotify:", err);
+    console.log(err);
   }
 }
 
@@ -124,6 +126,16 @@ cron.schedule("0 18-23 * * *",async () => {
     const users = await User.find()
   for(let user of users){
        await checkAndNotify(user.username, user.email).catch(()=>console.log("error from 6 am schedule"));;
+    }
+}, {
+  timezone: "Asia/Kolkata"
+});
+
+// for testing
+cron.schedule("* * * * *",async () => {
+    const users = await User.find()
+  for(let user of users){
+       if(user.username == 'abhilashsadhu8') await checkAndNotify(user.username, user.email).catch(()=>console.log("error at 12 am schedule"));;
     }
 }, {
   timezone: "Asia/Kolkata"
